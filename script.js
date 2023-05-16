@@ -6,8 +6,14 @@ $(document).ready(function() {
     console.log("I'm working!");
     var blockTime = $(this).siblings(".description").val()
     console.log("time warp", blockTime)
+    
 
   })
+
+  {
+    // $(this).localStorage.setItem("hour-9", ".description") 
+    document.getElementById("hour-9").innerHTML = localStorage.setItem("past", ".description")
+}
   
   //NOTE can also use .click
   // TODO: Add a listener for click events on the save button. This code should
