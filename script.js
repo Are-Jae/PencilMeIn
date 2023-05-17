@@ -1,64 +1,44 @@
-// Wrap all code that interacts with the DOM in a call to jQuery to ensure that
-// the code isn't run until the browser has finished rendering all the elements
-// in the html.
-$(document).ready(function() {
-  $(".saveBtn").on("click", function(){
-    console.log("I'm working!");
-    var blockTime = $(this).siblings(".description").val()
-    console.log("time warp", blockTime)
-    
+$(document).ready(function () {
+  // grabbing id for currentDay and setting its inner html to whatever dayjs gives us as a date
+  $("#currentDay").text(dayjs().format('MMMM DD YYYY'))
 
+  // grabbing all occurences of a class of time-block
+  var timeblocks = $('.time-block')
+  // setting varibale currentHour to whatever dayjs tells us the current hour is
+  var currentHour = dayjs().hour()
+  // doing a for loop through all .time-block (classes of time-block)
+  timeblocks.each(function () {
+    // for each iteration(i in a for loop) we want to grab the hour of that time-block in html from its id
+    var hourId = $(this).attr("id")
+    // check if the htmls id is less then the current hour, then we know its the past
+    if (hourId < currentHour) {
+      $(this).children(".description").attr("class", "col-8 col-md-10 description past")
+      // check if the htmls id is greater then the current hour, then we know its the future
+    } else if (hourId > currentHour) {
+      $(this).children(".description").attr("class", "col-8 col-md-10 description future")
+    } else {
+      // check if the htmls id is equal to the current hour, then we know its the present
+      $(this).children(".description").attr("class", "col-8 col-md-10 description present")
+    }
   })
 
+  // grab class of saveBtn and listen for a click
+  // once clicked run a function
+  $(".saveBtn").on("click", function (event) {
+    // because event listener is on button, we use event.preventDefault()
+    event.preventDefault()
+    // set "value" variable to whatever is typed into the textare 
+    var value = $(this).siblings(".description").val().replace(key)
+    // set "key" varibale to whatever time block id the user types into
+    var key = $(this).parent().attr("id")
+
+    // save the key(id - time block value) to the corresponding text typed into its textarea
+    localStorage.setItem(key, JSON.stringify(value))
+  })
   
-  
-  //NOTE can also use .click
-  // TODO: Add a listener for click events on the save button. This code should
-  // use the id in the containing time-block as a key to save the user input in
-  // local storage. HINT: What does `this` reference in the click listener
-  // function? How can DOM traversal be used to get the "hour-x" id of the
-  // time-block containing the button that was clicked? How might the id be
-  // useful when saving the description in local storage?
-  //
-  // TODO: Add code to apply the past, present, or future class to each time
-  // block by comparing the id to the current hour. HINTS: How can the id
-  // attribute of each time-block be used to conditionally add or remove the
-  // past, present, and future classes? How can Day.js be used to get the
-  // current hour in 24-hour time?
-  //
-  // TODO: Add code to get any user input that was saved in localStorage and set
-  // the values of the corresponding textarea elements. HINT: How can the id
-  // attribute of each time-block be used to do this?
-  //
-  // TODO: Add code to display the current date in the header of the page.
-});
-// first get current hour by using dayjs().hour() set that to variable
-// loop over your hour blocks, set a comparison variable block hour = block id
-// if current hour === block hour then add class to that block that makes it green
-// if current hour > block hour then add class that makes it grey
-// if current hour < block hour then add class that makes it red
-
-function Hour() {
-
-  //var currentHour = dayjs().hour()
-  
-var timeblocks = document.getElementsByClassName('time-block')
-for(let i =0; i < timeblocks.length ; i++){
-  timeblocks[i].getAttribute('id')
-  console.log(timeblocks[i].getAttribute('id'))
-}
-
-}
-
-
-  function userInputStorage() {
-    var input = localStorage.setItem('9', '10', '11');
-    if (input) {
-      input = JSON.parse('input');
-
-    } else {
-      console.log("No user input");
-    } return input; 
+  // loop through 9-17 and for each value, pull its local storage
+  // replace the textare it corresponds to with whatever was saved to that hour 
+  for(let i = 9; i <= 17; i++) {
+    $(`#${i} textarea`).val(JSON.parse(localStorage.getItem(`${i}`)))
   }
-userInputStorage();
-Hour();
+});
