@@ -10,10 +10,7 @@ $(document).ready(function() {
 
   })
 
-  {
-    // $(this).localStorage.setItem("hour-9", ".description") 
-    document.getElementById("hour-9").innerHTML = localStorage.setItem("past", ".description")
-}
+  
   
   //NOTE can also use .click
   // TODO: Add a listener for click events on the save button. This code should
@@ -35,4 +32,33 @@ $(document).ready(function() {
   //
   // TODO: Add code to display the current date in the header of the page.
 });
+// first get current hour by using dayjs().hour() set that to variable
+// loop over your hour blocks, set a comparison variable block hour = block id
+// if current hour === block hour then add class to that block that makes it green
+// if current hour > block hour then add class that makes it grey
+// if current hour < block hour then add class that makes it red
 
+function Hour() {
+
+  //var currentHour = dayjs().hour()
+  
+var timeblocks = document.getElementsByClassName('time-block')
+for(let i =0; i < timeblocks.length ; i++){
+  timeblocks[i].getAttribute('id')
+  console.log(timeblocks[i].getAttribute('id'))
+}
+
+}
+
+
+  function userInputStorage() {
+    var input = localStorage.setItem('9', '10', '11');
+    if (input) {
+      input = JSON.parse('input');
+
+    } else {
+      console.log("No user input");
+    } return input; 
+  }
+userInputStorage();
+Hour();
